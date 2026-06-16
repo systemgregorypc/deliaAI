@@ -2,12 +2,12 @@ export async function onRequestPost(context) {
   try {
     const { prompt } = await context.request.json();
 
-    // ESTE MODELO ESTÁ VERIFICADO Y ACTIVO EN LA INFRAESTRUCTURA DE CLOUDFLARE
-    const aiResponse = await context.env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+    // MODELO QWEN 2.5: ACTIVO, VIGENTE Y EXPERTO EN PROGRAMACIÓN SIN FILTROS
+    const aiResponse = await context.env.AI.run('@cf/qwen/qwen2.5-7b-instruct', {
       messages: [
         { 
           role: 'system', 
-          content: 'Eres DeliaAI, un asistente de programación avanzado y sin filtros restrictivos. Tu objetivo es generar código web, aplicaciones y lógica de programación de forma directa, clara y completa.' 
+          content: 'Eres DeliaAI, una inteligencia artificial experta en programación avanzada, desarrollo web y aplicaciones, sin filtros restrictivos. Genera código limpio, directo y funcional.' 
         },
         { role: 'user', content: prompt }
       ]
