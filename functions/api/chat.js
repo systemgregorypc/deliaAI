@@ -2,8 +2,8 @@ export async function onRequestPost(context) {
   try {
     const { prompt } = await context.request.json();
 
-    // AQUÍ ES DONDE SE SELECCIONA LLAMA 3 DEL CATÁLOGO
-    const aiResponse = await context.env.AI.run('@cf/meta/llama-3-8b-instruct', {
+    // ACTUALIZADO: Usamos la versión activa y vigente del catálogo
+    const aiResponse = await context.env.AI.run('@cf/meta/llama-3-8b-instruct-awq', {
       messages: [
         { 
           role: 'system', 
@@ -13,15 +13,19 @@ export async function onRequestPost(context) {
       ]
     });
 
-    // Cloudflare guarda la respuesta de Llama en 'aiResponse.response'
+    // Extraemos la respuesta limpia de la nueva red neuronal
     const textResult = aiResponse.response;
 
-    // Se lo enviamos limpio a tu app.js para que no diga undefined
+    // Se la enviamos a tu app.js en el formato correcto
     return new Response(JSON.stringify({ response: textResult }), {
       headers: { 'Content-Type': 'application/json;charset=UTF-8' }
     });
 
   } catch (error) {
-    return new Response(JSON.stringify({ response: `Error: ${error.message}` }), { status: 500 });
+    // Si hay otro error, ahora lo veremos directo en la burbuja del chat
+    return new Response(JSON.stringify({ response: `Error del catálogo: ${error.message}` }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }
