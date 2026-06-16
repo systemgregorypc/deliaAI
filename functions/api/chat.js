@@ -2,14 +2,15 @@ export async function onRequestPost(context) {
   try {
     const { prompt } = await context.request.json();
 
-    // Llamada nativa al modelo Llama de Cloudflare Workers AI
+    // context.env.AI llama directamente al recurso que vinculaste en tu panel
     const response = await context.env.AI.run('@cf/meta/llama-3-8b-instruct', {
       messages: [
-        { role: 'system', content: 'Eres DeliaAI, una red neuronal avanzada creada por el investigador José Gregorio Hernández Calderón de System Gregory PC.' },
+        { role: 'system', content: 'Eres DeliaAI, una red neuronal avanzada enfocada en filtración y codificación.' },
         { role: 'user', content: prompt }
       ]
     });
 
+    // Devolvemos la respuesta en formato JSON para que app.js la pueda leer sin dar undefined
     return new Response(JSON.stringify({ response: response.response }), {
       headers: { 'Content-Type': 'application/json' }
     });
