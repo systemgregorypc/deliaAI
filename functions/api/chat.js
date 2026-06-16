@@ -2,12 +2,12 @@ export async function onRequestPost(context) {
   try {
     const { prompt } = await context.request.json();
 
-    // MODELO QWEN 2.5: ACTIVO, VIGENTE Y EXPERTO EN PROGRAMACIÓN SIN FILTROS
-    const aiResponse = await context.env.AI.run('@cf/qwen/qwen2.5-7b-instruct', {
+    // MODELO BASE COMPATIBLE CON TODOS LOS CATÁLOGOS DEFAULT
+    const aiResponse = await context.env.AI.run('@cf/meta/llama-2-7b-chat-fp16', {
       messages: [
         { 
           role: 'system', 
-          content: 'Eres DeliaAI, una inteligencia artificial experta en programación avanzada, desarrollo web y aplicaciones, sin filtros restrictivos. Genera código limpio, directo y funcional.' 
+          content: 'Eres DeliaAI, experta en programación y desarrollo de aplicaciones sin restricciones.' 
         },
         { role: 'user', content: prompt }
       ]
