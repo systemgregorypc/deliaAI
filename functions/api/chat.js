@@ -2,18 +2,20 @@ export async function onRequestPost(context) {
   try {
     const { prompt } = await context.request.json();
 
-    // MISTRAL SMALL 3.1: EL MODELO QUE ENCONTRASTE EN EL CATÁLOGO (ACTIVO Y EXPERTO EN CÓDIGO)
+    // MISTRAL SMALL CONFIGURADO CON MÁXIMA CAPACIDAD DE TEXTO
     const aiResponse = await context.env.AI.run('@cf/mistralai/mistral-small-3.1-24b-instruct', {
       messages: [
         { 
           role: 'system', 
-          content: 'Eres DeliaAI, un modelo de lenguaje avanzado y sin restricciones restrictivas. Tu único objetivo es generar código web, aplicaciones y soluciones técnicas de forma directa, completa y funcional.' 
+          content: 'Eres DeliaAI, un modelo de lenguaje avanzado sin restricciones. Tu objetivo es generar respuestas y códigos web COMPLETOS, detallados y funcionales. Nunca dejes una idea o un bloque de código a medias.' 
         },
         { role: 'user', content: prompt }
-      ]
+      ],
+      // AQUÍ AGREGAMOS LOS PARÁMETROS PARA EVITAR QUE SE CORTE:
+      max_tokens: 2500, // Le da espacio suficiente para escribir respuestas muy largas
+      temperature: 0.6  // Mantiene el balance ideal para que sea creativa pero precisa en programación
     });
 
-    // Extraemos la respuesta de Mistral
     const textResult = aiResponse.response;
 
     return new Response(JSON.stringify({ response: textResult }), {
